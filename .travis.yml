@@ -17,10 +17,6 @@ addons:
                 organization: kelwinssavoia
                 token: ${SONAR_TOKEN}
 
-script:
-        - python -m unittest -v test || travis_terminate 1;
-        - sonar-scanner || travis_terminate 1;
-
 jobs:
         include:
                 - stage: Build
@@ -33,6 +29,7 @@ jobs:
                           - coverage run test.py || travis_terminate 1;
                           - coverage report app.py || travis_terminate 1;
                           - coverage xml app.py || travis_terminate 1;
+                          - sonar-scanner || travis_terminate 1;
                 
                 - stage: STG Deploy
                   script: skip
