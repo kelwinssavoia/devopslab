@@ -12,6 +12,15 @@ before_install:
   -in mystical-magnet-315402-8f518299c260.json.enc -out ../mystical-magnet-315402-8f518299c260.json
   -d
 
+addons:
+        sonarcloud:
+                organization: kelwinssavoia
+                token: ${SONAR_TOKEN}
+
+script:
+        - python -m unittest -v test || travis_terminate 1;
+        - sonar-scanner || travis_terminate 1;
+
 jobs:
         include:
                 - stage: Build
