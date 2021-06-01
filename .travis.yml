@@ -19,7 +19,7 @@ jobs:
                   name: "Testes Unitarios"
                   # Instalação dos módulos
                   install:
-                          - pip install flask flask-wtf covarage
+                          - pip install flask flask-wtf coverage
                   script: #Script de Teste
                           - coverage run test.py || travis_terminate 1;
                           - coverage report app.py || travis_terminate 1;
