@@ -18,7 +18,7 @@ script:
 # Definir o Deploy no GAE
 deploy:
         provider: gae
-        keyfile: /vagrant/mystical-magnet-315402-8f518299c260.json
+        keyfile: ../mystical-magnet-315402-8f518299c260.json
         project: mystical-magnet-315402
         on:
                 branch: main
