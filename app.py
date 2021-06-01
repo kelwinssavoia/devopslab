@@ -9,15 +9,6 @@ csfr = CSRFProtect(app)
 def pagina_inicial():
     return "Hello World"
 
-@app.route("/bug")
-def bad():
-    try:
-        raise TypeError()
-    except TypeError as e:
-        print(e)
-    except TypeError as e:
-        print("Duplicado.")
-
 
 if __name__ == '__main__':
     app.run(debug=True)
