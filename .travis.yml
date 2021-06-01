@@ -15,12 +15,10 @@ install:
 script:
   - python -m unittest -v test || travis_terminate 1;
 
-# Definir o Deploy no Heroku
+# Definir o Deploy no GAE
 deploy:
-        provider: heroku
-        strategy: api
-        api_key: $HEROKU_API_KEY
-        edge: true 
-        app: devopslab-kelwins
+        provider: gae
+        keyfile: /vagrant/mystical-magnet-315402-8f518299c260.json
+        project: mystical-magnet-315402
         on:
                 branch: main
