@@ -7,24 +7,51 @@ os: linux
 python:
   - "3.7.9"
 
-# Instalação de Módulos que são necessários para a Aplicação.
-install:
-  - pip install flask
- 
-# Defini o script de Teste que deve rodar toda vez que o código for alterado.
-script:
-  - python -m unittest -v test || travis_terminate 1;
-
-# Definir o Deploy no GAE
-deploy:
-        provider: gae
-        keyfile: ../mystical-magnet-315402-8f518299c260.json
-        project: mystical-magnet-315402
-        on:
-                branch: main
-
 before_install:
 - openssl aes-256-cbc -K $encrypted_1a144e751318_key -iv $encrypted_1a144e751318_iv
   -in mystical-magnet-315402-8f518299c260.json.enc -out ../mystical-magnet-315402-8f518299c260.json
   -d
+
+jobs:
+        include:
+                - stage: Build
+
+                  name: "Testes Unitarios"
+                  # Instalação dos módulos
+                  install:
+                          - pip install flask flask-wtf covarage
+                  script: #Script de Teste
+                          - coverage run test.py || travis_terminate 1;
+                          - coverage report app.py || travis_terminate 1;
+                          - coverage xml app.py || travis_terminate 1;
+                
+                - stage: STG Deploy
+                  script: skip
+                  # Deploy Heroku
+                  deploy:
+                          provider: heroku
+                          strategy: api
+                          api_key: $HEROKU_API_KEY
+                          edge: true
+                          app: devopslab-kelwins
+                          on:
+                                  branch: main
+
+                - stage: STG TEST
+                  script:
+                          - curl https://devopslab-kelwins.herokuapp.com/ | grep Hello || travis_terminate 1;
+
+                - stage: PROD Deploy
+                  script: skip
+                  # Deploy GAE
+                  deploy:
+                          provider: gae
+                          keyfile: ../mystical-magnet-315402-8f518299c260.json
+                          project: mystical-magnet-315402
+                          on:
+                                 branch: main
+
+                - stage: PROD TEST
+                  script:
+                          - curl https://mystical-magnet-315402.uc.r.appspot.com/ | grep Hello || travis_terminate 1;
 
